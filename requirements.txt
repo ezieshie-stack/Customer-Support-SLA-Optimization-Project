@@ -1,11 +1,9 @@
+streamlit
 pandas
+plotly
 numpy
+scikit-learn
+scipy
 matplotlib
 seaborn
-scikit-learn
-openpyxl
-ipykernel
-streamlit
 watchdog
-plotly
-nbformat>=4.2.0
