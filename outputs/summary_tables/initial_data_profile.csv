@@ -1,0 +1,12 @@
+,Ticket ID,Customer Name,Customer Email,Customer Age,Customer Gender,Product Purchased,Date of Purchase,Ticket Type,Ticket Subject,Ticket Description,Ticket Status,Resolution,Ticket Priority,Ticket Channel,First Response Time,Time to Resolution,Customer Satisfaction Rating
+count,8469.0,8469,8469,8469.0,8469,8469,8469,8469,8469,8469,8469,8469,8469,8469,5650,2769,8469.0
+unique,,8028,8320,,3,42,,5,16,8077,3,2770,4,4,,,
+top,,Michael Garcia,bsmith@example.com,,Male,Canon EOS,,Refund request,Refund request,I'm having an issue with the {product_purchased}. Please assist. I need assistance as soon as possible because it's affecting my work and productivity.,Pending Customer Response,No resolution recorded,Medium,Email,,,
+freq,,5,4,,2896,240,,1752,576,25,2881,5700,2192,2143,,,
+mean,4235.0,,,44.02680363679301,,,2020-12-30 01:35:13.071201024,,,,,,,,2023-06-01 11:26:17.617699328,2023-06-01 11:16:51.722643456,2.9971661353170385
+min,1.0,,,18.0,,,2020-01-01 00:00:00,,,,,,,,2023-05-31 21:55:00,2023-05-31 21:53:00,1.0
+25%,2118.0,,,31.0,,,2020-07-02 00:00:00,,,,,,,,2023-06-01 05:24:00,2023-06-01 05:34:00,3.0
+50%,4235.0,,,44.0,,,2020-12-31 00:00:00,,,,,,,,2023-06-01 11:26:00,2023-06-01 11:17:00,3.0
+75%,6352.0,,,57.0,,,2021-07-01 00:00:00,,,,,,,,2023-06-01 17:37:00,2023-06-01 17:07:00,3.0
+max,8469.0,,,70.0,,,2021-12-30 00:00:00,,,,,,,,2023-06-02 00:54:00,2023-06-02 00:55:00,5.0
+std,2444.9340481902573,,,15.29611249888238,,,,,,,,,,,,,0.8044464870928834

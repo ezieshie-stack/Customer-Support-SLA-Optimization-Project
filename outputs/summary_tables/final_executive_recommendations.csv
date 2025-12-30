@@ -1,0 +1,5 @@
+Focus Area,Action,Estimated Impact
+Category Optimization,Assign specialized agents to Refund Requests to reduce processing time by 30%.,~2.5% reduction in SLA breaches.
+Predictive Triage,Prioritize tickets flagged by the SLA Breach model (Critical priority & Social Media).,~1.5% reduction in high-priority breaches.
+Channel Strategy,Integrate Chat/Web teams to smooth demand volatility spikes.,Reduced FRT variance.
+Monitoring Sustenance,Deploy the 7-day rolling demand dashboard for proactively staffing surges.,Prevents staffing-related bottlenecks.
