@@ -6,8 +6,8 @@ import plotly.graph_objects as go
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="SLA Optimization Dashboard",
-    page_icon="📊",
+    page_title="SLA Intelligence Suite",
+    page_icon="🤖",
     layout="wide"
 )
 
@@ -30,15 +30,17 @@ st.markdown("""
 # --- 1. LOAD DATA ---
 @st.cache_data
 def load_data():
-    # Try different paths to be robust
     try:
         df = pd.read_csv("outputs/dashboard/customer_support_sla_dashboard.csv")
     except FileNotFoundError:
         try:
             df = pd.read_csv("../outputs/dashboard/customer_support_sla_dashboard.csv")
         except FileNotFoundError:
-            st.error("❌ Data file not found. Please run 'generate_dashboard_csv.py' first.")
-            return None
+            try:
+                 df = pd.read_csv("customer_support_sla_dashboard.csv") # Try root
+            except:
+                st.error("❌ Data file not found.")
+                return None
             
     df['Ticket_Date'] = pd.to_datetime(df['Ticket_Date'])
     return df
@@ -46,125 +48,142 @@ def load_data():
 df = load_data()
 
 if df is not None:
-    # --- SIDEBAR FILTERS ---
-    st.sidebar.header("🔍 Filters")
+    st.title("🤖 SLA Intelligence & Decision Suite")
+    st.markdown("**Project Goal:** Minimize financial loss from SLA breaches using predictive AI.")
     
-    # Date Filter
-    min_date = df['Ticket_Date'].min()
-    max_date = df['Ticket_Date'].max()
-    
-    start_date, end_date = st.sidebar.date_input(
-        "Date Range",
-        value=(min_date, max_date),
-        min_value=min_date,
-        max_value=max_date
-    )
-    
-    # Priority Filter
-    all_priorities = ['All'] + sorted(df['Ticket Priority'].unique().tolist())
-    priority = st.sidebar.selectbox("Ticket Priority", all_priorities)
-    
-    # Channel Filter
-    all_channels = ['All'] + sorted(df['Ticket Channel'].unique().tolist())
-    channel = st.sidebar.selectbox("Ticket Channel", all_channels)
+    # --- TABS FOR STORYTELLING ---
+    tab1, tab2 = st.tabs(["📊 Strategic Context (The Problem)", "🎯 Sniper Command Center (The Solution)"])
 
-    # Apply Filters
-    mask = (df['Ticket_Date'] >= pd.to_datetime(start_date)) & (df['Ticket_Date'] <= pd.to_datetime(end_date))
-    
-    if priority != 'All':
-        mask = mask & (df['Ticket Priority'] == priority)
-    if channel != 'All':
-        mask = mask & (df['Ticket Channel'] == channel)
+    # ==============================================================================
+    # TAB 1: STRATEGIC CONTEXT (DIAGNOSTICS)
+    # ==============================================================================
+    with tab1:
+        st.header("1. Diagnostic Intelligence")
+        st.markdown("Understanding *where* and *why* we are losing money.")
+        st.markdown("---")
         
-    df_filtered = df[mask]
-
-    # --- MAIN DASHBOARD ---
-    st.title("📊 Support Operations & SLA Optimization")
-    st.markdown("### Executive Risk & Financial Dashboard")
-    st.markdown("---")
-
-    # --- ROW 1: KPI CARDS ---
-    col1, col2, col3, col4 = st.columns(4)
-    
-    breach_rate = df_filtered['Is_SLA_Breach'].mean()
-    total_tickets = len(df_filtered)
-    total_cost = df_filtered['Breach_Cost'].sum()
-    
-    # Calculate High Risk Share if bucket exists
-    if 'Risk_Bucket' in df_filtered.columns:
-        high_risk_count = len(df_filtered[df_filtered['Risk_Bucket'] == 'High Risk'])
-        high_risk_share = high_risk_count / total_tickets if total_tickets > 0 else 0
-    else:
-        high_risk_share = 0
-
-    col1.metric("🚨 SLA Breach Rate", f"{breach_rate:.1%}", delta_color="inverse")
-    col2.metric("🎫 Total Tickets", f"{total_tickets:,}")
-    col3.metric("💸 Est. Financial Loss", f"${total_cost:,.0f}", delta_color="inverse")
-    col4.metric("🔥 High Risk Tickets", f"{high_risk_share:.1%}", help="Share of tickets predicted as High Risk by AI")
-
-    st.markdown("---")
-
-    # --- ROW 2: TRENDS ---
-    col_left, col_right = st.columns(2)
-    
-    with col_left:
-        st.subheader("📈 Breach Rate Trend (Weekly)")
-        trend_data = df_filtered.resample('W', on='Ticket_Date')['Is_SLA_Breach'].mean().reset_index()
-        fig_trend = px.line(trend_data, x='Ticket_Date', y='Is_SLA_Breach', markers=True, 
-                            labels={'Is_SLA_Breach': 'Breach Rate'}, line_shape='spline')
-        fig_trend.update_layout(yaxis_tickformat='.0%')
+        # KPIS
+        col1, col2, col3, col4 = st.columns(4)
+        total_loss = df['Breach_Cost'].sum()
+        breach_rate = df['Is_SLA_Breach'].mean()
+        high_risk_vol = len(df[df['Ticket Priority'] == 'Critical'])
+        
+        col1.metric("Total Financial Exposure", f"${total_loss:,.0f}", delta_color="inverse")
+        col2.metric("Overall Breach Rate", f"{breach_rate:.1%}", delta_color="inverse")
+        col3.metric("Critical Volume", f"{high_risk_vol:,}")
+        col4.metric("Audited Tickets", f"{len(df):,}")
+        
+        st.markdown("---")
+        
+        # ROW 1: PRIORITY vs CHANNEL
+        c1, c2 = st.columns(2)
+        with c1:
+            st.subheader("⚠️ Breach Rate by Priority")
+            prio_data = df.groupby("Ticket Priority")['Is_SLA_Breach'].mean().reset_index()
+            fig_prio = px.bar(prio_data, x="Ticket Priority", y="Is_SLA_Breach", color="Is_SLA_Breach", 
+                              color_continuous_scale="Reds", title="Critical Tickets Fail Most Often")
+            fig_prio.update_layout(yaxis_tickformat=".0%")
+            st.plotly_chart(fig_prio, use_container_width=True)
+            
+        with c2:
+            st.subheader("📡 Breach Rate by Channel")
+            chan_data = df.groupby("Ticket Channel")['Is_SLA_Breach'].mean().reset_index()
+            fig_chan = px.bar(chan_data, x="Ticket Channel", y="Is_SLA_Breach", color="Is_SLA_Breach",
+                              color_continuous_scale="OrRd", title="Channel Impact is Negligible (Myth Busted)")
+            fig_chan.update_layout(yaxis_tickformat=".0%")
+            st.plotly_chart(fig_chan, use_container_width=True)
+            
+        # ROW 2: FINANCIAL TREND
+        st.subheader("💰 Weekly Cost of Failure Trend")
+        cost_trend = df.resample('W', on='Ticket_Date')['Breach_Cost'].sum().reset_index()
+        fig_trend = px.area(cost_trend, x='Ticket_Date', y='Breach_Cost', 
+                            title="Accumulated Financial Loss Over Time (Baseline)", markers=True)
+        fig_trend.update_traces(line_color="#e74c3c")
         st.plotly_chart(fig_trend, use_container_width=True)
+
+    # ==============================================================================
+    # TAB 2: OPERATIONAL COMMAND (THE SNIPER)
+    # ==============================================================================
+    with tab2:
+        st.header("2. Operational Intervention")
+        st.markdown("Deploying 'The Sniper' model to intercept high-risk tickets *before* they breach.")
         
-    with col_right:
-        st.subheader("💰 Financial Loss Trend (Weekly)")
-        cost_trend = df_filtered.resample('W', on='Ticket_Date')['Breach_Cost'].sum().reset_index()
-        fig_cost = px.bar(cost_trend, x='Ticket_Date', y='Breach_Cost', 
-                          labels={'Breach_Cost': 'Lost Revenue ($)'})
-        fig_cost.update_traces(marker_color='salmon')
-        st.plotly_chart(fig_cost, use_container_width=True)
-
-    # --- ROW 3: DRIVERS ---
-    col_l, col_r = st.columns(2)
-    
-    with col_l:
-        st.subheader("⚠️ Breach Rate by Priority")
-        prio_risk = df_filtered.groupby('Ticket Priority')['Is_SLA_Breach'].mean().reset_index().sort_values('Is_SLA_Breach', ascending=False)
-        fig_prio = px.bar(prio_risk, x='Ticket Priority', y='Is_SLA_Breach', color='Is_SLA_Breach', 
-                          color_continuous_scale='Reds')
-        fig_prio.update_layout(yaxis_tickformat='.0%')
-        st.plotly_chart(fig_prio, use_container_width=True)
+        # --- SIDEBAR CONTROLS MOVED HERE FOR CONTEXT ---
+        st.markdown("#### ⚙️ Configuration")
+        col_ctrl1, col_ctrl2 = st.columns(2)
         
-    with col_r:
-        st.subheader("📡 Breach Rate by Channel")
-        chan_risk = df_filtered.groupby('Ticket Channel')['Is_SLA_Breach'].mean().reset_index().sort_values('Is_SLA_Breach', ascending=False)
-        fig_chan = px.bar(chan_risk, x='Is_SLA_Breach', y='Ticket Channel', orientation='h',
-                          color='Is_SLA_Breach', color_continuous_scale='OrRd')
-        fig_chan.update_layout(xaxis_tickformat='.0%')
-        st.plotly_chart(fig_chan, use_container_width=True)
+        with col_ctrl1:
+            capacity = st.select_slider(
+                "Daily Escalation Capacity (Tickets/Day)",
+                options=[10, 25, 50, 75, 100, "All"],
+                value=50,
+                key="capacity_slider"
+            )
+            
+        with col_ctrl2:
+            intervention_cost = st.number_input("Intervention Cost per Ticket ($)", value=2, min_value=0)
 
-    # --- ROW 4: HEATMAP & DRILLDOWN ---
-    st.subheader("🔥 Risk Heatmap (Priority x Channel)")
-    heatmap_data = df_filtered.pivot_table(index='Ticket Priority', columns='Ticket Channel', values='Is_SLA_Breach', aggfunc='mean')
-    fig_heat = px.imshow(heatmap_data, text_auto='.0%', color_continuous_scale='RdYlGn_r', aspect="auto")
-    st.plotly_chart(fig_heat, use_container_width=True)
+        st.markdown("---")
+        
+        # --- SIMULATION LOGIC ---
+        total_dates = df['Ticket_Date'].nunique()
+        baseline_loss = df['Breach_Cost'].sum()
+        sim_df = df.copy()
+        
+        def apply_sniper_logic(group):
+            group = group.sort_values('Pred_Breach_Prob', ascending=False)
+            group['Flagged'] = False
+            limit = len(group) if capacity == "All" else int(capacity)
+            if len(group) > 0:
+                group.iloc[:limit, group.columns.get_loc('Flagged')] = True
+            return group
 
-    st.subheader("📋 Top Risk Drivers (Drilldown)")
-    # Group by Type & Product to find pockets of failure
-    drilldown = df_filtered.groupby(['Ticket Type', 'Product Purchased']).agg(
-        Tickets=('Ticket ID', 'count'),
-        Breach_Rate=('Is_SLA_Breach', 'mean'),
-        Avg_Resolution=('Resolution_Hours', 'mean'),
-        Total_Cost=('Breach_Cost', 'sum')
-    ).reset_index()
-    
-    # Filter for significant volume
-    drilldown = drilldown[drilldown['Tickets'] > 10].sort_values('Total_Cost', ascending=False).head(10)
-    
-    st.dataframe(
-        drilldown.style.format({
-            'Breach_Rate': '{:.1%}',
-            'Avg_Resolution': '{:.1f} hrs',
-            'Total_Cost': '${:,.0f}'
-        }),
-        use_container_width=True
-    )
+        sim_df = sim_df.groupby('Ticket_Date', group_keys=False).apply(apply_sniper_logic)
+        
+        flagged_tickets = sim_df[sim_df['Flagged']]
+        caught_breaches = flagged_tickets[flagged_tickets['Is_SLA_Breach'] == True]
+        
+        tickets_reviewed = len(flagged_tickets)
+        breaches_prevented = len(caught_breaches)
+        operational_cost = tickets_reviewed * intervention_cost
+        gross_savings = caught_breaches['Breach_Cost'].sum()
+        net_savings = gross_savings - operational_cost
+        roi = (net_savings / operational_cost) if operational_cost > 0 else 0
+
+        # --- ROI METRICS ---
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("🔍 Targeted Reviews", f"{tickets_reviewed:,}")
+        c2.metric("🛡️ Breaches Prevented", f"{breaches_prevented:,}")
+        c3.metric("💸 Operations Cost", f"${operational_cost:,.0f}")
+        c4.metric("💰 NET SAVINGS", f"${net_savings:,.0f}", delta=f"{roi:.1f}x ROI")
+        
+        st.markdown("---")
+
+        # --- RISK CURVE ---
+        st.subheader("Why 'Top 50'? (The Risk Capture Curve)")
+        sorted_risk = df.sort_values('Pred_Breach_Prob', ascending=False)
+        sorted_risk['Cumulative_Cost'] = sorted_risk['Breach_Cost'].cumsum()
+        sorted_risk['Total_Cost'] = sorted_risk['Breach_Cost'].sum()
+        sorted_risk['Pct_Captured'] = sorted_risk['Cumulative_Cost'] / sorted_risk['Total_Cost']
+        sorted_risk['Tickets_Reviewed'] = range(1, len(sorted_risk) + 1)
+        
+        chart_data = sorted_risk.iloc[::10, :][['Tickets_Reviewed', 'Pct_Captured']]
+        fig_curve = px.area(chart_data, x='Tickets_Reviewed', y='Pct_Captured',
+                            labels={'Pct_Captured': '% Risk Captured'},
+                            title="Diminishing Returns: 80% of Risk is in the Top 20% of Tickets")
+        if capacity != "All":
+             fig_curve.add_vline(x=int(capacity)*total_dates, line_dash="dash", line_color="red", annotation_text="Limit")
+        st.plotly_chart(fig_curve, use_container_width=True)
+
+        # --- LIVE LIST ---
+        st.subheader("📋 Live Daily 'Kill List'")
+        latest_date = sim_df['Ticket_Date'].max()
+        todays_list = sim_df[(sim_df['Ticket_Date'] == latest_date) & (sim_df['Flagged'])].sort_values('Pred_Breach_Prob', ascending=False)
+        
+        st.dataframe(
+            todays_list[['Ticket ID', 'Ticket Priority', 'Pred_Breach_Prob', 'Breach_Cost']].style.format({
+                'Pred_Breach_Prob': '{:.1%}',
+                'Breach_Cost': '${:,.0f}'
+            }).background_gradient(subset=['Pred_Breach_Prob'], cmap='Reds'),
+            use_container_width=True
+        )
