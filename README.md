@@ -62,4 +62,4 @@ Customer-Support-SLA-Optimization/
 *   **Executive Science**: Packaging complex stats into a board-ready narrative and interaction model.
 
 ---
-*Built by [Your Name] — Senior Operations Analyst Portfolio*
+*Built by David Ezieshi*
