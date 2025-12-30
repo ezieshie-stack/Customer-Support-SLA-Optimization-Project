@@ -37,4 +37,4 @@ venv.bak/
 # Project Data (Optional - usually we ignore large data, but for this portfolio we might keep the sample CSV if small)
 # data/
 # For now, excluding dashboard outputs to keep repo clean
-outputs/dashboard/
+# outputs/dashboard/
