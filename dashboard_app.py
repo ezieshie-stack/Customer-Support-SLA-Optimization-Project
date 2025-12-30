@@ -30,17 +30,18 @@ st.markdown("""
 # --- 1. LOAD DATA ---
 @st.cache_data
 def load_data():
+    file_path = "customer_support_sla_dashboard.csv"
     try:
-        df = pd.read_csv("outputs/dashboard/customer_support_sla_dashboard.csv")
+        df = pd.read_csv(file_path)
     except FileNotFoundError:
+        # Fallback to outputs folder if running locally
         try:
-            df = pd.read_csv("../outputs/dashboard/customer_support_sla_dashboard.csv")
-        except FileNotFoundError:
-            try:
-                 df = pd.read_csv("customer_support_sla_dashboard.csv") # Try root
-            except:
-                st.error("❌ Data file not found.")
-                return None
+             df = pd.read_csv("outputs/dashboard/customer_support_sla_dashboard.csv")
+        except:
+             import os
+             st.error(f"❌ Data file not found. Current Directory: {os.getcwd()}")
+             st.error(f"Files in root: {os.listdir('.')}")
+             return None
             
     df['Ticket_Date'] = pd.to_datetime(df['Ticket_Date'])
     return df
