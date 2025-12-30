@@ -59,6 +59,20 @@ This canonical notebook follows a strict 9-step analytical flow:
 
 ---
 
+## 📊 Executive Dashboard (Tableau Public)
+
+This project includes an executive-level interactive dashboard designed for Support Operations leaders.
+
+🔗 **Live Dashboard**: [Tableau Public Link Here]
+
+The dashboard enables stakeholders to:
+- Monitor SLA breach rates and trends
+- Identify high-risk priorities and channels
+- Quantify financial impact of SLA failures
+- Drill down into ticket types and products driving risk
+
+---
+
 ## 📊 Key Findings
 
 | Metric | Insight | Action |
