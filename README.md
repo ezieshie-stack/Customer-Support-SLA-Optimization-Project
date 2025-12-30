@@ -63,13 +63,20 @@ This canonical notebook follows a strict 9-step analytical flow:
 
 This project includes an executive-level interactive dashboard designed for Support Operations leaders.
 
-🔗 **Live Dashboard**: [Tableau Public Link Here]
+## 📊 Executive Dashboard (Interactive App)
 
-The dashboard enables stakeholders to:
-- Monitor SLA breach rates and trends
-- Identify high-risk priorities and channels
-- Quantify financial impact of SLA failures
-- Drill down into ticket types and products driving risk
+This project includes a fully interactive **Python-based Dashboard** built with Streamlit & Plotly.
+
+### 🚀 How to Launch
+Run the following command in your terminal:
+```bash
+streamlit run dashboard_app.py
+```
+
+**Key Features:**
+- **Real-time Filtering**: Slice data by Date, Priority, and Channel.
+- **Financial Impact**: Visualizes lost revenue due to SLA breaches.
+- **AI Integration**: Highlights tickets flagged as "High Risk" by the Random Forest model.
 
 ---
 
