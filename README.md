@@ -27,6 +27,24 @@ This operational intelligence suite moves the organization from "Firefighting" t
 
 **Projected Annual Impact:** ~$450,000 to ~$700,000 in prevented SLA penalties and churn risk.
 
+## Visual Analytics Dashboards
+
+Interactive Tableau dashboards provide **stats at a click** for operational monitoring and ML-powered intervention planning:
+
+### 📊 [Operational Monitoring Dashboard](https://public.tableau.com/views/OperationalMonitoring/Dashboard2?:language=en-US&:display_count=n&:origin=viz_share_link)
+- Risk Heatmap (Priority × Channel)
+- SLA Breach Trends
+- Cost by Channel Analysis
+- Interactive filters for real-time exploration
+
+### 🤖 [SLA Risk Intelligence Dashboard](https://public.tableau.com/views/SLARiskIntelligence/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
+- ML Model Risk Distribution (Prediction Histogram)
+- Model Accuracy Validation (Risk Bucket vs Actual Breaches)
+- **Top 50 Kill List** — Highest-risk tickets for immediate intervention
+- Breach Rate by Priority with ML insights
+
+> **Architecture**: `Raw Data → Python ML Pipeline (89% ROC-AUC) → Predictions CSV → Tableau Visualization`
+
 ## Repository Structure
 ```
 Customer-Support-SLA-Optimization/
@@ -58,8 +76,9 @@ Customer-Support-SLA-Optimization/
 ## Skills Demonstrated
 *   **Operational Analytics**: Translating "breach rates" into "financial exposure".
 *   **Predictive Modeling**: Cost-sensitive Machine Learning (Random Forest) optimizing for business value ($), not just accuracy.
+*   **Data Visualization**: Interactive Tableau dashboards for operational monitoring and ML insights.
 *   **Simulation & Optimization**: Designing capacity-constrained strategies (The Nuke vs The Sniper) for real-world deployment.
 *   **Executive Science**: Packaging complex stats into a board-ready narrative and interaction model.
 
 ---
-*Built by [Your Name] — Senior Operations Analyst Portfolio*
+*Built by David Ezieshi — Senior Operations Analyst Portfolio*
