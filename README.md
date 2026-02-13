@@ -30,7 +30,7 @@ The core challenges:
 
 ---
 
-## 📊 What Was Done — The Full Story
+## 📊 Methodology & Approach
 
 ### Phase 1: Data Understanding & Diagnosis
 
