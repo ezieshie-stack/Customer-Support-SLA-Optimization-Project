@@ -81,5 +81,10 @@ Customer-Support-SLA-Optimization/
 *   **Executive Science**: Packaging complex stats into a board-ready narrative and interaction model.
 
 ---
-*Built by David Ezieshi — Senior Operations Analyst Portfolio*
 
+## 👤 Author
+
+> *"Every dataset has a story. My job is to find it, prove it, and make it actionable."*
+
+**David Ezieshi** — Business Analyst & Data Analytics  
+[LinkedIn](https://www.linkedin.com/in/david-ezieshi/) | [GitHub](https://github.com/ezieshie-stack)
